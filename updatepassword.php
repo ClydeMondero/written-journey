@@ -47,21 +47,37 @@ if (isset($_POST['updatepass'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UPDATE FORGOT PASSWORD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+
 </head>
+
 <body>
-    <div class="content">
-        <form method="POST">
-            <label>New Password</label><br>
-            <input type="password" name="newpassword" placeholder="************" required /><br><br>
-            <label>Confirm Password</label><br>
-            <input type="password" name="confirmpassword" placeholder="************" required /><br><br>
-            <input type="submit" name="updatepass" value="Update Password">
-        </form>
-    </div>    
+    <div class="container mt-5">
+        <div class="card p-4">
+            <h2 class="text-center mb-4">UPDATE FORGOT PASSWORD</h2>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="newpassword" class="form-label">New Password</label>
+                    <input type="password" class="form-control" id="newpassword" name="newpassword" placeholder="************" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confirmpassword" class="form-label">Confirm Password</label>
+                    <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="************" required>
+                </div>
+                <div class="d-grid">
+                    <button type="submit" name="updatepass" class="btn btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
+
 </html>
