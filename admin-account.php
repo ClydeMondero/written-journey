@@ -1,7 +1,4 @@
-<?php 
-include('admin-nav.php');
-include('admin-password-settings.php');
-
+<?php
 // Initialize variables with default values
 $existingFullname = "";
 $existingUsername = "";
@@ -87,58 +84,91 @@ if ($conn) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ADMIN ACCOUNT SETTINGS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div id="account-tab">
-        <div class="account-form">
-            <h1>ACCOUNT SETTINGS</h1>
-            <p>Manage and protect your account</p> <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 bg-light">
+                <div class="list-group">
+                    <?php include 'admin-nav.php'; ?>
+                </div>
+            </div>
 
-            <form method="POST" enctype="multipart/form-data">
-                <label class="tflabel">FULL NAME</label> <br>
-                <input type="text" name="newFullname" placeholder="Full Name" value="<?= htmlspecialchars($existingFullname); ?>" required /><br><br>
-                
-                <label class="tflabel">USERNAME</label> <br>
-                <input type="text" name="newUsername" placeholder="Username" value="<?= htmlspecialchars($existingUsername); ?>" required /><br><br>
-                
-                <label class="tflabel">ADDRESS</label> <br>
-                <input type="text" name="newAddress" placeholder="Address" value="<?= htmlspecialchars($existingAddress); ?>" required /><br><br>
-                
-                <label class="tflabel">PHONE NUMBER</label> <br>
-                <input type="text" name="newPhonenumber" placeholder="Phone Number" value="<?= htmlspecialchars($existingPhonenumber); ?>" required /><br><br>
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <div>
+                    <div class="account-form">
+                        <h1>ACCOUNT SETTINGS</h1>
+                        <p>Manage and protect your account</p> <br><br>
 
-                <div class="imageProd">
-                    <img src="<?= htmlspecialchars($existingImage); ?>" id="imagePreview" alt="Image Preview" style="width:100px; height:100px;">
-                    <span class="profile">PROFILE PICTURE</span>
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="imageProd">
+                                <img src="<?= htmlspecialchars($existingImage); ?>" id="imagePreview" class="img-thumbnail" alt="Image Preview" style="width:100px; height:100px;">
+                                <span class="profile">PROFILE PICTURE</span>
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="newImg">Upload New Image</label>
+                                <input type="file" id="newImg" name="newImg" class="form-control-file" onchange="previewImage(this);">
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="newFullname">FULL NAME</label>
+                                <input type="text" name="newFullname" class="form-control" placeholder="Full Name" value="<?= htmlspecialchars($existingFullname); ?>" required />
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="newUsername">USERNAME</label>
+                                <input type="text" name="newUsername" class="form-control" placeholder="Username" value="<?= htmlspecialchars($existingUsername); ?>" required />
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="newAddress">ADDRESS</label>
+                                <input type="text" name="newAddress" class="form-control" placeholder="Address" value="<?= htmlspecialchars($existingAddress); ?>" required />
+                            </div>
+
+                            <div class="form-group mt-3">
+                                <label for="newPhonenumber">PHONE NUMBER</label>
+                                <input type="text" name="newPhonenumber" class="form-control" placeholder="Phone Number" value="<?= htmlspecialchars($existingPhonenumber); ?>" required />
+                            </div>
+
+                            <button type="submit" name="changeInfo" class="btn btn-success mt-3">Save</button>
+                        </form>
+                    </div>
                 </div>
 
-                <input type="file" id="newImg" name="newImg" onchange="previewImage(this);"><br><br>
-                <input class="save" type="submit" name="changeInfo" value="Save"><br><br>
-            </form>
+                <?php include('admin-password-settings.php'); ?>
+
+                <script>
+                    function previewImage(input) {
+                        var preview = document.getElementById('imagePreview');
+                        var file = input.files[0];
+                        var reader = new FileReader();
+
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                        };
+
+                        if (file) {
+                            reader.readAsDataURL(file);
+                        } else {
+                            preview.src = "no-image.webp";
+                        }
+                    }
+                </script>
+            </div>
         </div>
-    </div>    
-
-    <script>
-        function previewImage(input) {
-            var preview = document.getElementById('imagePreview');
-            var file = input.files[0];
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "no-image.webp";
-            }
-        }
-    </script>
+    </div>
 </body>
+
 </html>

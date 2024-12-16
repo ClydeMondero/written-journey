@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include('admin-nav.php');
 require 'connection.php';
 require_once 'tcpdf/tcpdf.php'; // Include TCPDF library
 
@@ -128,63 +127,107 @@ if (isset($_GET['generate_report'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div class="content">
-        <h1>Admin Dashboard</h1>
-        
-        <div class="stats">
-            <h3>General Statistics</h3>
-            <p>Total Users: <?= htmlspecialchars($userCount); ?></p>
-            <p>Total Authors: <?= htmlspecialchars($authorCount); ?></p>
-            <p>Total Reviewers: <?= htmlspecialchars($reviewerCount); ?></p>
-            <p>Total Editors: <?= htmlspecialchars($editorCount); ?></p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 bg-light p-3">
+                <?php include 'admin-nav.php'; ?>
+            </div>
+            <div class="col-md-9">
+                <div class="content p-4">
+                    <h2 class="mb-4">Admin Dashboard</h2>
 
-            <hr>
-            
-            <h3>Submission Statistics</h3>
-            <p>Total Submitted Articles: <?= htmlspecialchars($submissionCount); ?></p>
+                    <div class="stats mb-4">
+                        <h3 class="mb-3">General Statistics</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="p-3 border bg-light">
+                                    <h5>Total Users</h5>
+                                    <p><?= htmlspecialchars($userCount); ?></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 border bg-light">
+                                    <h5>Total Authors</h5>
+                                    <p><?= htmlspecialchars($authorCount); ?></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 border bg-light">
+                                    <h5>Total Reviewers</h5>
+                                    <p><?= htmlspecialchars($reviewerCount); ?></p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="p-3 border bg-light">
+                                    <h5>Total Editors</h5>
+                                    <p><?= htmlspecialchars($editorCount); ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
 
-            <hr>
+                        <h3 class="mb-3">Submission Statistics</h3>
+                        <div class="p-3 border bg-light">
+                            <h5>Total Submitted Articles</h5>
+                            <p><?= htmlspecialchars($submissionCount); ?></p>
+                        </div>
 
-            <h3>Review Timelines</h3>
-            <?php if (!empty($statusCounts)): ?>
-                <table border="1" cellspacing="0" cellpadding="5">
-                    <thead>
-                        <tr>
-                            <th>Status</th>
-                            <th>Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($statusCounts as $status => $count): ?>
-                            <tr>
-                                <td><?= htmlspecialchars(ucfirst($status)); ?></td>
-                                <td><?= htmlspecialchars($count); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p>No review timelines available.</p>
-            <?php endif; ?>
+                        <hr>
 
-            <hr>
+                        <h3 class="mb-3">Review Timelines</h3>
+                        <?php if (!empty($statusCounts)): ?>
+                            <div class="row">
+                                <?php foreach ($statusCounts as $status => $count): ?>
+                                    <div class="col-md-3 mb-3">
+                                        <div class="p-3 border bg-light">
+                                            <h5 class="mb-1"><?= htmlspecialchars(ucfirst($status)); ?></h5>
+                                            <p class="mb-0">Count: <?= htmlspecialchars($count); ?></p>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php else: ?>
+                            <p>No review timelines available.</p>
+                        <?php endif; ?>
+                    </div>
 
-            <h3>Journal Impact</h3>
-            <p>Total Downloads: <?= htmlspecialchars($totalDownloads); ?></p>
-            <p>Average Downloads per Article: <?= htmlspecialchars($averageDownloads); ?></p>
+                    <hr>
 
-            <hr>
+                    <h3 class="mb-3">Journal Impact</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="p-3 border bg-light">
+                                <h5>Total Downloads</h5>
+                                <p><?= htmlspecialchars($totalDownloads); ?></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 border bg-light">
+                                <h5>Average Downloads per Article</h5>
+                                <p><?= htmlspecialchars($averageDownloads); ?></p>
+                            </div>
+                        </div>
+                    </div>
 
-            <form method="GET">
-                <button type="submit" name="generate_report">Generate Report</button>
-            </form>
+                    <hr>
+
+                    <form method="GET">
+                        <button type="submit" name="generate_report" class="btn btn-success">Generate Report</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
