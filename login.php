@@ -179,7 +179,8 @@ function getLoginAttempts($conn, $email, $role)
 
 <body class="bg-light">
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card p-4 shadow-sm" style="width: 350px;">
+        <div class="card p-4 shadow-sm" style="width: 400px;">
+            <img src="img/logo.png" class="d-block mx-auto mb-4" alt="Written Journey Logo" width="120" height="120">
             <h3 class="text-center mb-4">LOGIN</h3>
             <form method="POST">
                 <div class="mb-3">

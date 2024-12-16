@@ -99,8 +99,9 @@ $resultMostDownloaded = $conn->query($sqlMostDownloaded);
                             <p><strong>DOI:</strong> <?= htmlspecialchars($article['doi']); ?></p>
                             <p><strong>Reference:</strong> <?= htmlspecialchars($article['reference']); ?></p>
                             <p><strong>Citation:</strong> <?= htmlspecialchars($article['citation']); ?></p>
-                            <small class="text-muted">Downloads: <?= htmlspecialchars($article['download_count']); ?></small>
+
                             <a href="customer-articles.php?download=<?= htmlspecialchars($article['id']); ?>" class="btn btn-success btn-sm">Download PDF</a>
+                            <small class="text-muted">Downloads: <?= htmlspecialchars($article['download_count']); ?></small>
                         </div>
                     <?php endwhile; ?>
                 </div>

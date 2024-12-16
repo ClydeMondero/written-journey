@@ -56,32 +56,35 @@ if ($result && mysqli_num_rows($result) > 0) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Change Authors Password</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-    <script>
-        function updateProfileImage(newImagePath) {
-            document.getElementById('profileImage').src = newImagePath;
-        }
-    </script>
-
-    <div class="settings">
-        <h1>PASSWORD SETTINGS</h1>
+    <div class="container">
+        <h2 class="mt-4 text-center">PASSWORD SETTINGS</h2>
         <form method="post">
             <!-- Current Password -->
-            <label for="current_password">Current Password:</label> <br>
-            <input type="password" id="current_password" name="current_password" placeholder="Enter your old password" required> <br> <br>
+            <div class="form-group">
+                <label for="current_password">Current Password:</label>
+                <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Enter your old password" required>
+            </div> <br>
 
-            <label for="password">New Password:</label> <br>
-            <input type="password" id="password" name="password" placeholder="Enter your new password" value="" required /> <br> <br>
+            <!-- New Password -->
+            <div class="form-group">
+                <label for="password">New Password:</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your new password" required>
+            </div> <br>
 
             <!-- Confirm New Password -->
-            <label for="confirm_password">Confirm New Password:</label> <br>
-            <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter your new password" value="" required /> <br> <br>
+            <div class="form-group">
+                <label for="confirm_password">Confirm New Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Re-enter your new password" required>
+            </div> <br>
 
             <!-- Submit Button -->
-            <button type="submit" name="change_password">Change Password</button>
+            <button type="submit" name="change_password" class="btn btn-success">Change Password</button>
         </form>
     </div>
 </body>

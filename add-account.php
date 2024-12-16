@@ -91,74 +91,74 @@ $searchEmail = $_GET['search'] ?? '';
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 bg-light">
-                <div class="list-group">
-                    <?php include 'admin-nav.php'; ?>
-                </div>
-            </div>
 
-            <!-- Main Content -->
-            <div class="col-md-9">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Manage Users</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- Search Bar -->
-                        <form method="GET" class="mb-4">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control" placeholder="Search by email" value="<?php echo htmlspecialchars($searchEmail); ?>">
-                                <div class="input-group-append">
-                                    <button class="btn btn-success" type="submit">Search</button>
+<div class="container-fluid ">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 bg-light">
+            <div class="list-group">
+                <?php include 'admin-nav.php'; ?>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">MANAGE USERS</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Search Bar -->
+                    <form method="GET" class="mb-4">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search by email" value="<?php echo htmlspecialchars($searchEmail); ?>">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- User Management Tables -->
+                    <section id="user-management">
+                        <h3>Users</h3>
+                        <?php renderTable($conn, 'users', $searchEmail); ?>
+                        <h3>Authors</h3>
+                        <?php renderTable($conn, 'authors', $searchEmail); ?>
+                        <h3>Editors</h3>
+                        <?php renderTable($conn, 'editors', $searchEmail); ?>
+                        <h3>Reviewers</h3>
+                        <?php renderTable($conn, 'reviewers', $searchEmail); ?>
+                    </section>
+
+                    <!-- Unblock User Form -->
+                    <section id="unblock-user" class="mt-5">
+                        <h3>Unblock User</h3>
+                        <form method="post" action="add-account.php" class="needs-validation" novalidate>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="txtadmin" class="form-label">Admin Password:</label>
+                                <input type="password" id="txtadmin" name="txtadmin" class="form-control" placeholder="Enter admin password" required>
+                                <div class="invalid-feedback">
+                                    Please enter your admin password.
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Unblock User</button>
                         </form>
+                    </section>
 
-                        <!-- User Management Tables -->
-                        <section id="user-management">
-                            <h3>Users</h3>
-                            <?php renderTable($conn, 'users', $searchEmail); ?>
-                            <h3>Authors</h3>
-                            <?php renderTable($conn, 'authors', $searchEmail); ?>
-                            <h3>Editors</h3>
-                            <?php renderTable($conn, 'editors', $searchEmail); ?>
-                            <h3>Reviewers</h3>
-                            <?php renderTable($conn, 'reviewers', $searchEmail); ?>
-                        </section>
-
-                        <!-- Unblock User Form -->
-                        <section id="unblock-user" class="mt-5">
-                            <h3>Unblock User</h3>
-                            <form method="post" action="add-account.php" class="needs-validation" novalidate>
-                                <div class="form-group">
-                                    <label for="email" class="form-label">Email:</label>
-                                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter email address" required>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid email address.
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="txtadmin" class="form-label">Admin Password:</label>
-                                    <input type="password" id="txtadmin" name="txtadmin" class="form-control" placeholder="Enter admin password" required>
-                                    <div class="invalid-feedback">
-                                        Please enter your admin password.
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-success">Unblock User</button>
-                            </form>
-                        </section>
-
-                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 
 </html>

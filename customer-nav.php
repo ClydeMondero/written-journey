@@ -78,7 +78,7 @@ if ($resultUser->num_rows > 0) {
                 </ul>
             </nav>
             <div class="dropdown">
-                <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="img/<?php echo basename($profilePic); ?>" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">

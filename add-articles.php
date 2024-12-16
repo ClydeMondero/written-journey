@@ -183,7 +183,7 @@ $issuesResult = mysqli_query($conn, $issuesQuery);
                         <div class="card-body table-responsive">
                             <form action="" method="post">
                                 <table class="table table-bordered table-hover">
-                                    <thead class="table-dark">
+                                    <thead class="table">
                                         <tr>
                                             <th>ID</th>
                                             <th>Title</th>

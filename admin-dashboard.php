@@ -143,8 +143,10 @@ if (isset($_GET['generate_report'])) {
                 <?php include 'admin-nav.php'; ?>
             </div>
             <div class="col-md-9">
-                <div class="content p-4">
-                    <h2 class="mb-4">Admin Dashboard</h2>
+                <div class="card content p-4">
+                    <div class="card-header">
+                        <h2 class="card-title mb-4">ADMIN DASHBOARD</h2>
+                    </div>
 
                     <div class="stats mb-4">
                         <h3 class="mb-3">General Statistics</h3>

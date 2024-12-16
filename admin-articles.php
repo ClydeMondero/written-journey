@@ -72,12 +72,14 @@ $issuesResult = mysqli_query($conn, $issuesQuery);
 
             <!-- Main Content -->
             <div class="col-md-9">
-                <div class="content" style="height: 100%">
-                    <h2 class="text4">ARTICLES LIST</h2>
+                <div class="card" style="height: 100%">
+                    <div class="card-header">
+                        <h3 class="card-title">Articles</h3>
+                    </div>
 
                     <!-- Search Form -->
                     <form action="" method="get" class="mb-3">
-                        <label for="search" class="form-label">Search Issue:</label>
+                        <label for="search" class="form-label">Search Article:</label>
                         <div class="input-group">
                             <input type="text" name="search" class="form-control" id="search" placeholder="Enter article title" required>
                             <button type="submit" class="btn btn-outline-secondary">Search</button>

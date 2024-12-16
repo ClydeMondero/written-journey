@@ -86,11 +86,14 @@ $searchResult = mysqli_query($conn, $searchQuery);
             </div>
 
             <!-- Main Content -->
-            <div class="col-md-9">
-                <h1 class="my-4">JOURNAL ISSUES</h1>
+            <div class="card col-md-9">
+
+                <div class="card-header">
+                    <h3 class="card-title my-4">JOURNAL ISSUES</h3>
+                </div>
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h2>ADD JOURNAL ISSUES</h2>
+                        <h4>ADD JOURNAL ISSUES</h4>
                     </div>
                     <div class="card-body">
                         <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -117,7 +120,7 @@ $searchResult = mysqli_query($conn, $searchQuery);
 
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h2>JOURNAL ISSUES LIST</h2>
+                        <h4>JOURNAL ISSUES LIST</h4>
                     </div>
                     <div class="card-body">
                         <form action="" method="get" class="mb-4">
