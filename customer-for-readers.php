@@ -4,49 +4,7 @@ ini_set('display_errors', 1);
 require 'connection.php';
 include('customer-nav.php');
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_name'])) {
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
 
-$userName = $_SESSION['user_name'];
-
-// If you want to log out, you can add a condition to check for a logout action
-if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-    // Clear all session variables
-    session_unset();
-    // Destroy the session
-    session_destroy();
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch user profile picture
-$sqlGetUser = "SELECT image_path FROM users WHERE name = ?";
-$stmt = $conn->prepare($sqlGetUser);
-$stmt->bind_param("s", $userName);
-$stmt->execute();
-$resultUser = $stmt->get_result();
-
-if ($resultUser->num_rows > 0) {
-    $user = $resultUser->fetch_assoc();
-    $profilePic = $user['image_path'];
-
-    if (empty($profilePic)) {
-        // Default profile picture if none is found
-        $profilePic = 'default-profile.png';
-    }
-} else {
-    // Default profile picture if none is found
-    $profilePic = 'default-profile.png';
-}
 
 ?>
 

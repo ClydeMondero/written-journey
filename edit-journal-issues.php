@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include('admin-nav.php');
 require 'connection.php';
 
 if (isset($_GET['id'])) {
@@ -59,52 +58,72 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="utf-8">
     <title>Edit Journal Issue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <h1>Edit Journal Issue</h1>
+    <div class="container">
+        <h1 class="text-center">Edit Journal Issue</h1>
 
-    <div class="edit">
-        <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
-            <label for="title">Title:</label>
-            <input type="text" name="title" id="title" value="<?php echo $issueData['title']; ?>" required placeholder="Enter title"><br><br>
-            
-            <label for="vol_no">Volume No.:</label>
-            <input type="text" name="vol_no" id="vol_no" value="<?php echo $issueData['vol_no']; ?>" required placeholder="Enter volume number"><br><br>
-            
-            <label for="publication_date">Publication Date:</label>
-            <input type="text" name="publication_date" id="publication_date" value="<?php echo $issueData['publication_date']; ?>" readonly><br><br>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 edit">
+                <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
 
-            <label for="image">Image:</label>
-            <input type="file" name="image" id="image" accept=".jpg, .jpeg, .png, .webp, .avif" onchange="previewImage(this);"><br><br>
+                    <div class="col-md-6 offset-md-3 imageProd">
+                        <img src="img/<?php echo $issueData['image']; ?>" id="imagePreview" class="img-fluid rounded mx-auto d-block" style="max-width: 300px; max-height: 300px;" alt="Image Preview">
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" name="title" id="title" class="form-control" value="<?php echo $issueData['title']; ?>" required placeholder="Enter title">
+                    </div>
 
-            <button type="submit" name="submit" class="btnSubmit">Update</button>
-        </form>
-    </div>
+                    <div class="mb-3">
+                        <label for="vol_no" class="form-label">Volume No.:</label>
+                        <input type="text" name="vol_no" id="vol_no" class="form-control" value="<?php echo $issueData['vol_no']; ?>" required placeholder="Enter volume number">
+                    </div>
 
-    <div class="imageProd">
-        <img src="img/<?php echo $issueData['image']; ?>" id="imagePreview" alt="Image Preview" height="100">
-    </div>
+                    <div class="mb-3">
+                        <label for="publication_date" class="form-label">Publication Date:</label>
+                        <input type="text" name="publication_date" id="publication_date" class="form-control" value="<?php echo $issueData['publication_date']; ?>" readonly>
+                    </div>
 
-    <script>
-        function previewImage(input) {
-            var preview = document.getElementById('imagePreview');
-            var file = input.files[0];
-            var reader = new FileReader();
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image:</label>
+                        <input type="file" name="image" id="image" class="form-control" accept=".jpg, .jpeg, .png, .webp, .avif" onchange="previewImage(this);">
+                    </div>
 
-            reader.onload = function (e) {
-                preview.src = e.target.result;
-            };
+                    <button type="submit" name="submit" class="btn btn-success">Update</button>
+                    <button type="button" class="btn btn-secondary" onclick="history.back()">Back</button>
+                </form>
+            </div>
 
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "no-image.webp";
+        </div>
+
+        <script>
+            function previewImage(input) {
+                var preview = document.getElementById('imagePreview');
+                var file = input.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                };
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "no-image.webp";
+                }
             }
-        }
-    </script>
+        </script>
+
+    </div>
 
 </body>
+
 </html>

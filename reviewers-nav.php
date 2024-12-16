@@ -2,11 +2,12 @@
 require 'connection.php';
 session_start();
 
-if (isset($_SESSION['reviewerEmail'])) {
-    $editorEmail = $_SESSION['reviewerEmail'];
+if (!isset($_SESSION['user_type'])) {
+    header("Location: customer-dashboard.php");
 } else {
-    echo "<script>alert('No valid email found in session');</script>";
-    exit;
+    if ($_SESSION['user_type'] != 'reviewers') {
+        header("Location: customer-dashboard.php");
+    }
 }
 
 // Fetch the reviewer's name and profile picture from the database based on the email
@@ -25,14 +26,14 @@ if ($result && $row = mysqli_fetch_assoc($result)) {
         $profile_picture = "img/default-profile.png";
     }
 } else {
-    $editorName = "EDITOR";
+    $editorName = "REVIEWER";
     $profile_picture = "img/default-profile.png";
 }
 
 // Perform logout logic
 if (isset($_POST['logout'])) {
     session_destroy();
-    header("Location: login.php");
+    header("Location: customer-dashboard.php");
     exit();
 }
 

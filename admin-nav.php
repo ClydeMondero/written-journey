@@ -1,5 +1,16 @@
 <?php
+error_reporting(E_ALL & ~E_NOTICE);
+session_start();
 require 'connection.php';
+
+if (!isset($_SESSION['user_type'])) {
+    header("Location: customer-dashboard.php");
+} else {
+    if ($_SESSION['user_type'] != 'admin') {
+        header("Location: customer-dashboard.php");
+    }
+}
+
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
@@ -34,7 +45,7 @@ if ($result && $row = mysqli_fetch_assoc($result)) {
 // Check if the logout form is submitted
 if (isset($_POST['logout'])) {
     session_destroy();
-    header("Location: login.php");
+    header("Location: customer-dashboard.php");
     exit();
 }
 

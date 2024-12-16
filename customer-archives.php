@@ -4,48 +4,9 @@ ini_set('display_errors', 1);
 require 'connection.php';
 include('customer-nav.php');
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_name'])) {
-    // Redirect to the login page
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-$userName = $_SESSION['user_name'];
-
-// If logout is requested
-if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-    session_unset();
-    session_destroy();
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-// Check database connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch user profile picture
-$sqlGetUser = "SELECT image_path FROM users WHERE name = ?";
-$stmt = $conn->prepare($sqlGetUser);
-$stmt->bind_param("s", $userName);
-$stmt->execute();
-$resultUser = $stmt->get_result();
-
-if ($resultUser->num_rows > 0) {
-    $user = $resultUser->fetch_assoc();
-    $profilePic = $user['image_path'];
-
-    if (empty($profilePic)) {
-        $profilePic = 'default-profile.png';
-    }
-} else {
-    $profilePic = 'default-profile.png';
-}
-
-// Search functionality
+// Search and sort functionality
 $search = '';
+$sortOrder = 'DESC'; // Default sort order
 $sqlGetIssues = "SELECT image, title, vol_no, publication_date, id FROM issues WHERE 1=1";
 
 if (isset($_GET['search']) && !empty($_GET['search'])) {
@@ -53,7 +14,11 @@ if (isset($_GET['search']) && !empty($_GET['search'])) {
     $sqlGetIssues .= " AND (title LIKE ? OR vol_no LIKE ? OR publication_date LIKE ?)";
 }
 
-$sqlGetIssues .= " ORDER BY publication_date DESC";
+if (isset($_GET['sort_order']) && in_array($_GET['sort_order'], ['ASC', 'DESC'])) {
+    $sortOrder = $_GET['sort_order'];
+}
+
+$sqlGetIssues .= " ORDER BY publication_date $sortOrder";
 
 $stmtIssues = $conn->prepare($sqlGetIssues);
 
@@ -80,8 +45,12 @@ $resultIssues = $stmtIssues->get_result();
 <body>
     <div class="container">
         <h1 class="text-center">Archives</h1>
-        <form method="GET" action="" class="d-flex justify-content-center">
+        <form method="GET" action="" class="d-flex justify-content-center gap-3">
             <input type="text" name="search" value="<?= htmlspecialchars($search); ?>" placeholder="Search by title, volume, or date" class="form-control">
+            <select name="sort_order" class="form-control">
+                <option value="DESC" <?= $sortOrder === 'DESC' ? 'selected' : ''; ?>>Newest First</option>
+                <option value="ASC" <?= $sortOrder === 'ASC' ? 'selected' : ''; ?>>Oldest First</option>
+            </select>
             <button type="submit" class="btn btn-success">Search</button>
         </form>
         <hr>
@@ -111,7 +80,6 @@ $resultIssues = $stmtIssues->get_result();
             <p class="text-center">No issues match your search.</p>
         <?php endif; ?>
     </div>
-
 </body>
 
 </html>

@@ -4,15 +4,47 @@ ini_set('display_errors', 1);
 include('editors-nav.php');
 require 'connection.php';
 
-// Handle status and comment update
+function safeOutput($value)
+{
+    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
+}
+
+// Handle comment update, and optional PDF upload
 if (isset($_POST['submit_review'])) {
     $articleId = intval($_POST['article_id']);
-    $newStatus = mysqli_real_escape_string($conn, $_POST['new_status']);
     $editorComment = mysqli_real_escape_string($conn, $_POST['editor_comment']);
 
-    $updateQuery = "UPDATE articles SET status = '$newStatus', editor_comment = '$editorComment' WHERE id = $articleId";
+    // Fetch the current article details to retain the old PDF if not replaced
+    $articleQuery = "SELECT pdf FROM articles WHERE id = $articleId";
+    $articleResult = mysqli_query($conn, $articleQuery);
+    $article = mysqli_fetch_assoc($articleResult);
+    $pdfPath = $article['pdf']; // Default to existing PDF
+
+    // Handle PDF upload
+    if (isset($_FILES['pdf']) && $_FILES['pdf']['error'] === UPLOAD_ERR_OK) {
+        $fileName = $_FILES['pdf']['name'];
+        $tmpName = $_FILES['pdf']['tmp_name'];
+        $fileSize = $_FILES['pdf']['size'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if ($fileExtension === 'pdf' && $fileSize <= 5000000) {
+            $newFileName = uniqid() . '.pdf';
+            $pdfPath = 'uploads/' . $newFileName;
+            move_uploaded_file($tmpName, $pdfPath);
+        } else {
+            echo "<script>alert('Invalid PDF file or size exceeds limit');</script>";
+        }
+    }
+
+    // Update the database with the new details
+    $updateQuery = "
+        UPDATE articles 
+        SET editor_comment = '$editorComment', 
+            pdf = '$pdfPath' 
+        WHERE id = $articleId";
+
     if (mysqli_query($conn, $updateQuery)) {
-        echo "<script>alert('Review submitted successfully'); window.location.href = 'status-editor-articles.php';</script>";
+        echo "<script>alert('Edit submitted successfully'); window.location.href = 'status-editor-articles.php';</script>";
     } else {
         echo "Error updating article: " . mysqli_error($conn);
     }
@@ -23,11 +55,6 @@ $articleId = intval($_GET['id']);
 $articleQuery = "SELECT * FROM articles WHERE id = $articleId";
 $articleResult = mysqli_query($conn, $articleQuery);
 $article = mysqli_fetch_assoc($articleResult);
-
-function safeOutput($value)
-{
-    return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
-}
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +71,7 @@ function safeOutput($value)
 <body>
     <div class="container">
         <a href="javascript:history.back()" class="btn btn-secondary mt-3">Back</a>
-        <h1 class="text-center">ARTICLE REVIEW</h1>
+        <h1 class="text-center">ARTICLE EDIT</h1>
         <div class="card">
             <h2 class="card-header"><?php echo safeOutput($article['title']); ?></h2>
             <div class="card-body">
@@ -61,22 +88,19 @@ function safeOutput($value)
         </div>
 
         <div class="card mt-3">
-            <h3 class="card-header">Submit Review</h3>
+            <h3 class="card-header">Submit Edit</h3>
             <div class="card-body">
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="article_id" value="<?php echo safeOutput($article['id']); ?>">
                     <div class="mb-3">
-                        <label for="new_status" class="form-label">Status:</label>
-                        <select name="new_status" id="new_status" class="form-select">
-                            <option value="Accepted by Editor" <?php echo $article['status'] == 'Accepted by Editor' ? 'selected' : ''; ?>>Accepted by Editor</option>
-                            <option value="Rejected by Editor" <?php echo $article['status'] == 'Rejected by Editor' ? 'selected' : ''; ?>>Rejected by Editor</option>
-                        </select>
+                        <label for="pdf" class="form-label">Upload New PDF:</label>
+                        <input type="file" name="pdf" id="pdf" class="form-control" accept=".pdf">
                     </div>
                     <div class="mb-3">
                         <label for="editor_comment" class="form-label">Comment:</label>
                         <textarea name="editor_comment" id="editor_comment" rows="4" cols="50" class="form-control"><?php echo safeOutput($article['editor_comment']); ?></textarea>
                     </div>
-                    <button type="submit" name="submit_review" class="btn btn-success">Submit Review</button>
+                    <button type="submit" name="submit_review" class="btn btn-success">Submit Edit</button>
                 </form>
             </div>
         </div>

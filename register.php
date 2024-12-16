@@ -130,83 +130,100 @@ if (isset($_POST["register"])) {
 </head>
 
 <body class="bg-light">
-    <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="card p-4 shadow-sm" style="width: 700px;">
-            <h3 class="text-center mb-4">SIGN UP</h3>
+    <div class="container-fluid p-4">
+        <div class="card shadow-sm mx-auto" style="max-width: 1200px;">
+            <h3 class="text-center p-3 mb-0">SIGN UP</h3>
             <form method="POST" onsubmit="return validateForm();">
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="role" class="form-label">Role</label>
-                            <select name="role" id="role" class="form-control" required>
-                                <option value="">-- Select Role --</option>
-                                <option value="Reader">Reader</option>
-                                <option value="Editor">Editor</option>
-                                <option value="Reviewer">Reviewer</option>
-                                <option value="Author">Author</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name" required>
-                        </div>
+                <!-- Landscape Layout -->
+                <div class="row p-3 g-4">
+                    <!-- Personal Information -->
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend class="fw-bold fs-5 mb-3">Personal Information</legend>
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" id="first_name" name="first_name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="middle_name" class="form-label">Middle Name</label>
+                                <input type="text" id="middle_name" name="middle_name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="role" class="form-label">Role</label>
+                                <select name="role" id="role" class="form-control" required>
+                                    <option value="">-- Select Role --</option>
+                                    <option value="Reader">Reader</option>
+                                    <option value="Editor">Editor</option>
+                                    <option value="Reviewer">Reviewer</option>
+                                    <option value="Author">Author</option>
+                                </select>
+                            </div>
+                        </fieldset>
                     </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="middle_name" class="form-label">Middle Name</label>
-                            <input type="text" id="middle_name" name="middle_name" class="form-control" placeholder="Middle Name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name" required>
-                        </div>
+
+                    <!-- Contact Information -->
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend class="fw-bold fs-5 mb-3">Contact Information</legend>
+                            <div class="mb-3">
+                                <label for="contact_number" class="form-label">Contact Number</label>
+                                <input type="tel" id="contact_number" name="contact_number" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" id="address" name="address" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" name="email" class="form-control" required>
+                            </div>
+                        </fieldset>
                     </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="contact_number" class="form-label">Contact Number</label>
-                            <input type="tel" id="contact_number" name="contact_number" class="form-control" placeholder="Contact Number" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" id="address" name="address" class="form-control" placeholder="Address" required>
-                        </div>
+
+                    <!-- Account Credentials -->
+                    <div class="col-md-4">
+                        <fieldset>
+                            <legend class="fw-bold fs-5 mb-3">Account Credentials</legend>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" id="username" name="name" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" id="password" name="password" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirm_password" class="form-label">Confirm Password</label>
+                                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I accept the <a href="#">Terms and Conditions</a>
+                                </label>
+                            </div>
+                        </fieldset>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" id="username" name="name" class="form-control" placeholder="Username" required>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="info@gmail.com" required>
-                        </div>
-                    </div>
+
+                <!-- Submit Button -->
+                <div class="text-center mb-4">
+                    <button type="submit" name="register" class="btn btn-success px-5">REGISTER</button>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required>
-                </div>
-                <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="word" name="word" required>
-                    <label class="form-check-label" for="word">I accept the <a href="#">Terms and Conditions</a></label>
-                </div>
-                <div class="d-grid">
-                    <button type="submit" name="register" class="btn btn-success">REGISTER</button>
-                </div>
-                <div class="text-center mt-3">
-                    <p class="mb-0">Have an account? <a href="login.php" class="link-success">LOGIN</a></p>
+
+                <!-- Login Redirect -->
+                <div class="text-center mb-3">
+                    <p>Have an account? <a href="login.php" class="link-success">LOGIN</a></p>
                 </div>
             </form>
         </div>
     </div>
+
+    <!-- Validation Script -->
     <script>
         function validateForm() {
             var password = document.getElementById('password').value;
@@ -219,5 +236,6 @@ if (isset($_POST["register"])) {
         }
     </script>
 </body>
+
 
 </html>

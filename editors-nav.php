@@ -2,12 +2,14 @@
 require 'connection.php';
 session_start();
 
-if (isset($_SESSION['editorEmail'])) {
-    $editorEmail = $_SESSION['editorEmail'];
+if (!isset($_SESSION['user_type'])) {
+    header("Location: customer-dashboard.php");
 } else {
-    echo "<script>alert('No valid email found in session');</script>";
-    exit;
+    if ($_SESSION['user_type'] != 'editors') {
+        header("Location: customer-dashboard.php");
+    }
 }
+
 
 // Fetch the editor's name and profile picture from the database based on the email
 $query = "SELECT name, image_path FROM editors WHERE email = ?";
@@ -32,7 +34,9 @@ if ($result && $row = mysqli_fetch_assoc($result)) {
 // Perform logout logic
 if (isset($_POST['logout'])) {
     session_destroy();
-    header("Location: login.php");
+
+    header("Location: customer-dashboard.php");
+
     exit();
 }
 

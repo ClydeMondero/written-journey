@@ -13,21 +13,6 @@ if (!$conn) {
 // Check if the user is logged in
 if (isset($_SESSION['user_name'])) {
     $userName = $_SESSION['user_name'];
-} else {
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-// If you want to log out, you can add a condition to check for a logout action
-if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-    // Clear all session variables
-    session_unset();
-    // Destroy the session
-    session_destroy();
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
 }
 
 // Retrieve user information from the database

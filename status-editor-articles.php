@@ -38,7 +38,7 @@ $articlesResult = mysqli_query($conn, $articlesQuery);
                         <th class="text-center">Issue</th>
                         <th class="text-center">PDF</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center">Review Article</th>
+                        <th class="text-center">Edit Article</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,7 +56,9 @@ $articlesResult = mysqli_query($conn, $articlesQuery);
                             <td class="text-center"><a href="<?php echo $row['pdf']; ?>" target="_blank">View PDF</a></td>
                             <td class="text-center"><?php echo htmlspecialchars($row['status']); ?></td>
                             <td class="text-center">
-                                <a href="editor-review-articles.php?id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">Review</a>
+                                <?php if ($row['status'] != 'Accepted by Reviewer'): ?>
+                                    <a href="editor-edit-article.php?id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">Edit</a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endwhile; ?>

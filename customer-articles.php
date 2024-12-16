@@ -4,44 +4,6 @@ ini_set('display_errors', 1);
 require 'connection.php';
 include('customer-nav.php');
 
-// Check if the user is logged in
-if (!isset($_SESSION['user_name'])) {
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-$userName = $_SESSION['user_name'];
-
-// Handle logout
-if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-    session_unset();
-    session_destroy();
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-// Check database connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch user profile picture
-$sqlGetUser = "SELECT image_path FROM users WHERE name = ?";
-$stmt = $conn->prepare($sqlGetUser);
-$stmt->bind_param("s", $userName);
-$stmt->execute();
-$resultUser = $stmt->get_result();
-
-if ($resultUser->num_rows > 0) {
-    $user = $resultUser->fetch_assoc();
-    $profilePic = $user['image_path'];
-
-    if (empty($profilePic)) {
-        $profilePic = 'default-profile.png';
-    }
-} else {
-    $profilePic = 'default-profile.png';
-}
 
 // Initialize the query for fetching articles
 $search = '';

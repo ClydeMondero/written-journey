@@ -5,12 +5,14 @@ require 'connection.php';
 
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-if (isset($_SESSION['authorEmail'])) {
-    $authorEmail = $_SESSION['authorEmail'];
+if (!isset($_SESSION['user_type'])) {
+    header("Location: customer-dashboard.php");
 } else {
-    echo "<script>alert('No valid email found in session');</script>";
-    exit;
+    if ($_SESSION['user_type'] != 'authors') {
+        header("Location: customer-dashboard.php");
+    }
 }
+
 
 
 // Fetch the author's name and profile picture from the database based on the email
@@ -36,7 +38,7 @@ if ($result && $row = mysqli_fetch_assoc($result)) {
 // Perform logout logic
 if (isset($_POST['logout'])) {
     session_destroy();
-    header("Location: login.php");
+    header("Location: customer-dashboard.php");
     exit();
 }
 

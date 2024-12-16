@@ -4,14 +4,6 @@ ini_set('display_errors', 1);
 session_start(); // Ensure session is started
 require 'connection.php';
 
-// Check if author is logged in
-if (isset($_SESSION['authorEmail'])) {
-    $authorEmail = $_SESSION['authorEmail'];
-} else {
-    echo "<script>alert('No valid email found in session'); window.location='login.php';</script>";
-    exit;
-}
-
 // Fetch the author's name and profile picture
 $query = "SELECT name, image_path FROM authors WHERE email = ?";
 $stmt = mysqli_prepare($conn, $query);

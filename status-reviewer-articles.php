@@ -4,22 +4,8 @@ ini_set('display_errors', 1);
 include('reviewers-nav.php');
 require 'connection.php';
 
-// Handle reviewer decision via buttons
-if (isset($_GET['action']) && isset($_GET['article_id'])) {
-    $articleId = intval($_GET['article_id']);
-    $action = $_GET['action'];
-    $newStatus = $action === 'accept' ? 'Accepted' : 'Rejected';
-
-    $updateQuery = "UPDATE articles SET status = '$newStatus' WHERE id = $articleId";
-    if (mysqli_query($conn, $updateQuery)) {
-        echo "<script>alert('Article status updated to $newStatus'); window.location.href = 'status-reviewer-articles.php';</script>";
-    } else {
-        echo "Error updating article: " . mysqli_error($conn);
-    }
-}
-
-// Fetch articles accepted by the editor
-$articlesQuery = "SELECT * FROM articles WHERE status = 'Accepted by Editor'";
+// Fetch articles
+$articlesQuery = "SELECT * FROM articles";
 $articlesResult = mysqli_query($conn, $articlesQuery);
 ?>
 
@@ -29,47 +15,48 @@ $articlesResult = mysqli_query($conn, $articlesQuery);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reviewer Article Status</title>
+    <title>Article Status</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">ARTICLES FOR REVIEW</h1>
+    <div class="container">
+        <h1 class="text-center mb-4">LIST OF ARTICLES</h1>
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="thead-dark">
                     <tr>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Email</th>
-                        <th>Abstract</th>
-                        <th>DOI</th>
-                        <th>Reference</th>
-                        <th>Citation</th>
-                        <th>Comments</th>
-                        <th>Issue</th>
-                        <th>PDF</th>
-                        <th>Reviewer Decision</th>
+                        <th class="text-center">Title</th>
+                        <th class="text-center">Author</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Abstract</th>
+                        <th class="text-center">DOI</th>
+                        <th class="text-center">Reference</th>
+                        <th class="text-center">Citation</th>
+                        <th class="text-center">Comments</th>
+                        <th class="text-center">Issue</th>
+                        <th class="text-center">PDF</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Review Article</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php while ($row = mysqli_fetch_assoc($articlesResult)): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($row['title']); ?></td>
-                            <td><?php echo htmlspecialchars($row['author']); ?></td>
-                            <td><?php echo htmlspecialchars($row['email']); ?></td>
-                            <td><?php echo htmlspecialchars($row['abstract']); ?></td>
-                            <td><?php echo htmlspecialchars($row['doi']); ?></td>
-                            <td><?php echo htmlspecialchars($row['reference']); ?></td>
-                            <td><?php echo htmlspecialchars($row['citation']); ?></td>
-                            <td><?php echo htmlspecialchars($row['comments']); ?></td>
-                            <td><?php echo htmlspecialchars($row['issues']); ?></td>
-                            <td><a href="<?php echo $row['pdf']; ?>" target="_blank" class="btn btn-outline-primary btn-sm">PDF</a></td>
-                            <td>
-                                <a href="?action=accept&article_id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">Accept</a>
-                                <a href="?action=reject&article_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Reject</a>
+                            <td class="text-center"><?php echo htmlspecialchars($row['title']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['author']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['abstract']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['doi']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['reference']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['citation']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['comments']); ?></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['issues']); ?></td>
+                            <td class="text-center"><a href="<?php echo $row['pdf']; ?>" target="_blank">View PDF</a></td>
+                            <td class="text-center"><?php echo htmlspecialchars($row['status']); ?></td>
+                            <td class="text-center">
+                                <a href="review-articles.php?id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">Review</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>

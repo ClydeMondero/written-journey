@@ -1,51 +1,26 @@
 <?php
 session_start();
-error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_WARNING);
 ini_set('display_errors', 1);
 require 'connection.php';
 
 // Check if the user is logged in
-if (!isset($_SESSION['user_name'])) {
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-$userName = $_SESSION['user_name'];
-
-// If you want to log out, you can add a condition to check for a logout action
-if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-    // Clear all session variables
-    session_unset();
-    // Destroy the session
-    session_destroy();
-    // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/written-journey/login.php");
-    exit;
-}
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch user profile picture
-$sqlGetUser = "SELECT image_path FROM users WHERE name = ?";
-$stmt = $conn->prepare($sqlGetUser);
-$stmt->bind_param("s", $userName);
-$stmt->execute();
-$resultUser = $stmt->get_result();
-
-if ($resultUser->num_rows > 0) {
-    $user = $resultUser->fetch_assoc();
-    $profilePic = $user['image_path'];
-
-    if (empty($profilePic)) {
-        $profilePic = 'default-profile.png';
+if (isset($_SESSION['user_type'])) {
+    // Redirect to the  handle accordingly
+    if ($_SESSION['user_type'] == 'admin') {
+        // Redirect to admin dashboard
+        header("Location: http://localhost/written-journey/admin-dashboard.php");
+    } else if ($_SESSION['user_type'] == 'authors') {
+        header("Location: http://localhost/written-journey/authors-articles.php");
+    } else if ($_SESSION['user_type'] == 'editors') {
+        header("Location: http://localhost/written-journey/status-editor-articles.php");
+    } elseif ($_SESSION['user_type'] == 'reviewers') {
+        header("Location: http://localhost/written-journey/status-reviewer-articles.php");
     }
-} else {
-    // Default profile picture if none is found
-    $profilePic = 'default-profile.png';
+    exit;
 }
+
+$profilePic = 'default-profile.png';
 ?>
 
 <!DOCTYPE html>
@@ -82,9 +57,7 @@ if ($resultUser->num_rows > 0) {
                     <img src="img/<?php echo basename($profilePic); ?>" alt="Profile Picture" class="rounded-circle" width="40" height="40">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="user-profile-settings.php?newUsername=<?php echo urlencode($userName); ?>">Profile Settings</a></li>
-                    <li><a class="dropdown-item" href="users-change-password.php">Password</a></li>
-                    <li><a class="dropdown-item" href="?logout=1">Logout</a></li>
+                    <li><a class="dropdown-item" href="login.php">Sign In</a></li>
                 </ul>
             </div>
         </div>
