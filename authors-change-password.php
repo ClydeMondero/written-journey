@@ -5,46 +5,46 @@ include 'authors-update-password.php';
 require 'connection.php';
 //include('authors-nav.php');
 
-    // Check connection
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
 
-    // Check if the user is logged in
-    if (isset($_SESSION['user_name'])) {
-        $userName = $_SESSION['user_name'];
-    } else {
-        // Redirect to the login page or handle accordingly
-        header("Location: http://localhost/journal/login.php");
-        exit;
-    }
+// Check if the user is logged in
+if (isset($_SESSION['user_name'])) {
+    $userName = $_SESSION['user_name'];
+} else {
+    // Redirect to the login page or handle accordingly
+    header("Location: http://localhost/written-journey/login.php");
+    exit;
+}
 
-    // If you want to log out, you can add a condition to check for a logout action
-    if (isset($_GET['logout']) && $_GET['logout'] == 1) {
-        // Clear all session variables
-        session_unset();
-        // Destroy the session
-        session_destroy();
-        // Redirect to the login page or handle accordingly
-        header("Location: http://localhost/journal/login.php");
-        exit;
-    }
+// If you want to log out, you can add a condition to check for a logout action
+if (isset($_GET['logout']) && $_GET['logout'] == 1) {
+    // Clear all session variables
+    session_unset();
+    // Destroy the session
+    session_destroy();
+    // Redirect to the login page or handle accordingly
+    header("Location: http://localhost/written-journey/login.php");
+    exit;
+}
 
-        // Retrieve user information from the database
-        $query = "SELECT image_path, address, first_name, middle_name, last_name, contact_number FROM authors WHERE name='$userName'";
-        $result = mysqli_query($conn, $query);
+// Retrieve user information from the database
+$query = "SELECT image_path, address, first_name, middle_name, last_name, contact_number FROM authors WHERE name='$userName'";
+$result = mysqli_query($conn, $query);
 
-        if ($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            
-            // Save the user information in session variables
-            $_SESSION['image_path'] = $row['image_path'];
-            $_SESSION['address'] = $row['address'];
-            $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['middle_name'] = $row['middle_name'];
-            $_SESSION['last_name'] = $row['last_name'];
-            $_SESSION['contact_number'] = $row['contact_number'];       
-    }
+if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+
+    // Save the user information in session variables
+    $_SESSION['image_path'] = $row['image_path'];
+    $_SESSION['address'] = $row['address'];
+    $_SESSION['first_name'] = $row['first_name'];
+    $_SESSION['middle_name'] = $row['middle_name'];
+    $_SESSION['last_name'] = $row['last_name'];
+    $_SESSION['contact_number'] = $row['contact_number'];
+}
 
 ?>
 
@@ -62,10 +62,10 @@ require 'connection.php';
 
     <script>
         function updateProfileImage(newImagePath) {
-        document.getElementById('profileImage').src = newImagePath;
+            document.getElementById('profileImage').src = newImagePath;
         }
     </script>
-    
+
     <div class="settings">
         <h1>PASSWORD SETTINGS</h1>
         <form method="post">
@@ -85,4 +85,5 @@ require 'connection.php';
         </form>
     </div>
 </body>
+
 </html>

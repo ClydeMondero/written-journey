@@ -14,7 +14,7 @@ if (isset($_SESSION['user_name'])) {
     $userName = $_SESSION['user_name'];
 } else {
     // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -25,7 +25,7 @@ if (isset($_GET['logout']) && $_GET['logout'] == 1) {
     // Destroy the session
     session_destroy();
     // Redirect to the login page or handle accordingly
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -35,7 +35,7 @@ $result = mysqli_query($conn, $query);
 
 if ($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
-    
+
     // Save the user information in session variables
     $_SESSION['image_path'] = $row['image_path'];
     $_SESSION['address'] = $row['address'];
@@ -60,10 +60,10 @@ if ($result && mysqli_num_rows($result) > 0) {
 
     <script>
         function updateProfileImage(newImagePath) {
-        document.getElementById('profileImage').src = newImagePath;
+            document.getElementById('profileImage').src = newImagePath;
         }
     </script>
-    
+
     <div class="settings">
         <h1>ACCOUNT SETTINGS</h1>
         <form action="authors-update-profile.php" class="forms" method="post" enctype="multipart/form-data">
@@ -76,32 +76,32 @@ if ($result && mysqli_num_rows($result) > 0) {
             </div>
 
             <div class="forms-content">
-            <!-- Display username -->
-            <label for="new_username">Username:</label> <br>
-            <input type="text" id="new_username" name="new_username" value="<?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : ''; ?>" required /> <br> <br>
+                <!-- Display username -->
+                <label for="new_username">Username:</label> <br>
+                <input type="text" id="new_username" name="new_username" value="<?php echo isset($_SESSION['user_name']) ? htmlspecialchars($_SESSION['user_name']) : ''; ?>" required /> <br> <br>
 
-            <!-- First Name -->
-            <label for="first_name">First Name:</label> <br>
-            <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" value="<?php echo isset($_SESSION['first_name']) ? htmlspecialchars($_SESSION['first_name']) : ''; ?>" required /> <br> <br>
+                <!-- First Name -->
+                <label for="first_name">First Name:</label> <br>
+                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name" value="<?php echo isset($_SESSION['first_name']) ? htmlspecialchars($_SESSION['first_name']) : ''; ?>" required /> <br> <br>
 
-            <!-- Middle Name -->
-            <label for="middle_name">Middle Name:</label> <br>
-            <input type="text" id="middle_name" name="middle_name" placeholder="Enter your middle name" value="<?php echo isset($_SESSION['middle_name']) ? htmlspecialchars($_SESSION['middle_name']) : ''; ?>" required /> <br> <br>
+                <!-- Middle Name -->
+                <label for="middle_name">Middle Name:</label> <br>
+                <input type="text" id="middle_name" name="middle_name" placeholder="Enter your middle name" value="<?php echo isset($_SESSION['middle_name']) ? htmlspecialchars($_SESSION['middle_name']) : ''; ?>" required /> <br> <br>
 
-            <!-- Last Name -->
-            <label for="last_name">Last Name:</label> <br>
-            <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" value="<?php echo isset($_SESSION['last_name']) ? htmlspecialchars($_SESSION['last_name']) : ''; ?>" required /> <br> <br>
+                <!-- Last Name -->
+                <label for="last_name">Last Name:</label> <br>
+                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name" value="<?php echo isset($_SESSION['last_name']) ? htmlspecialchars($_SESSION['last_name']) : ''; ?>" required /> <br> <br>
 
-            <!-- Address --> 
-            <label for="address">Address:</label> <br>
-            <input type="text" id="address" name="address" placeholder="Enter your address" value="<?php echo isset($_SESSION['address']) ? htmlspecialchars($_SESSION['address']) : ''; ?>" required /> <br> <br>
+                <!-- Address -->
+                <label for="address">Address:</label> <br>
+                <input type="text" id="address" name="address" placeholder="Enter your address" value="<?php echo isset($_SESSION['address']) ? htmlspecialchars($_SESSION['address']) : ''; ?>" required /> <br> <br>
 
-            <!-- Contact Number -->
-            <label for="contact_number">Contact Number:</label><br>
-            <input type="text" id="contact_number" name="contact_number" pattern="[0-9]{11}" value="<?php echo $_SESSION['contact_number']; ?>"><br>
+                <!-- Contact Number -->
+                <label for="contact_number">Contact Number:</label><br>
+                <input type="text" id="contact_number" name="contact_number" pattern="[0-9]{11}" value="<?php echo $_SESSION['contact_number']; ?>"><br>
 
-            <!-- Submit Button -->
-            <button type="submit" class="save-btn">Save Changes</button>
+                <!-- Submit Button -->
+                <button type="submit" class="save-btn">Save Changes</button>
             </div>
         </form>
     </div>
@@ -119,4 +119,5 @@ if ($result && mysqli_num_rows($result) > 0) {
     </script>
 
 </body>
+
 </html>

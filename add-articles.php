@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include('authors-nav.php');
 require 'connection.php';
 
 $fileUploadedSuccessfully = false;
@@ -87,106 +86,150 @@ $issuesResult = mysqli_query($conn, $issuesQuery);
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="utf-8">
-    <title>ARTICLES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
-    <h1 class="text1">ARTICLES</h1>
-    <div class="all">
-        <div class="add">
-            <h2 class="text2">Online Submission Form</h2><br>
-            <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
-                <label for="title">Paper Title:</label>
-                <input type="text" name="title" id="title" required placeholder="Enter title"><br><br>
-                
-                <label for="author">Author Name:</label>
-                <input type="text" name="author" id="author" required placeholder="Enter author name"><br><br>
-                
-                <label for="email">Author Email:</label>
-                <input type="email" name="email" id="email" required placeholder="Enter author email"><br><br>
-                
-                <label for="abstract">Abstract:</label>
-                <textarea name="abstract" id="abstract" required placeholder="Enter abstract"></textarea><br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Navigation -->
+            <div class="col-md-3 bg-light p-0 dvh-100">
+                <?php include('authors-nav.php'); ?>
+            </div>
 
-                <label for="issues">Select Issues:</label><br>
-                <select name="category" id="category" required>
-                    <?php while ($issue = mysqli_fetch_assoc($issuesResult)): ?>
-                        <option value="<?php echo $issue['title']; ?>"><?php echo $issue['title']; ?> (Vol. <?php echo $issue['vol_no']; ?>, <?php echo $issue['publication_date']; ?>)</option>
-                    <?php endwhile; ?>
-                </select><br><br>
-                
-                <label for="pdf">Upload Paper (PDF Format):</label>
-                <input type="file" name="pdf" id="pdf" accept=".pdf" required><br><br>
-                
-                <label for="reference">References:</label>
-                <textarea name="reference" id="reference" required placeholder="Enter all references"></textarea><br><br>
-                
-                <label for="citation">Citation:</label>
-                <textarea name="citation" id="citation" required placeholder="Enter citation"></textarea><br><br>
+            <!-- Main Content -->
+            <div class="col-md-9">
+                <div class="container py-4">
+                    <h2 class="mb-4">Add Articles</h2>
 
-                <label for="comments">Comments:</label>
-                <textarea name="comments" id="comments" required placeholder="Enter comments for editor"></textarea><br><br>
-                
-                <button type="submit" name="submit" class="btnSubmit">Submit</button>
-            </form>
-        </div>
+                    <!-- Submission Form -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Online Submission Form</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Paper Title</label>
+                                    <input type="text" name="title" id="title" class="form-control" required>
+                                </div>
 
-        <!-- Articles List -->
-        <div class="view">
-            <h1 class="text4">ARTICLES LIST</h1>
+                                <div class="mb-3">
+                                    <label for="author" class="form-label">Author Name</label>
+                                    <input type="text" name="author" id="author" class="form-control" required>
+                                </div>
 
-            <!-- Search Form -->
-            <form action="" method="get">
-                <label for="search" class="text5">Search Issue:</label>
-                <input type="text" name="search" class="searchtxt" id="search" placeholder="Enter article title" required>
-                <button type="submit" class="btnSearch">Search</button>
-            </form><br>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Author Email</label>
+                                    <input type="email" name="email" id="email" class="form-control" required>
+                                </div>
 
-            <form action="" method="post">
-                <table border="1" cellspacing="0" cellpadding="10" class="viewTable">
-                    <tr class="thView">
-                        <th>ID</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Email</th>
-                        <th>Abstract</th>
-                        <th>DOI</th>
-                        <th>Issues</th>
-                        <th>PDF</th>
-                        <th>References</th>
-                        <th>Citations</th>
-                        <th>Comments</th>
-                        <th>Status</th>
-                        <th>Edit</th>
-                        <th>Delete</th>
-                    </tr>
-                    <?php while ($row = mysqli_fetch_assoc($searchResult)): ?>
-                        <tr>
-                            <td><?php echo $row['id']; ?></td>
-                            <td><?php echo $row['title']; ?></td>
-                            <td><?php echo $row['author']; ?></td>
-                            <td><?php echo $row['email']; ?></td>
-                            <td><?php echo $row['abstract']; ?></td>
-                            <td><?php echo $row['doi']; ?></td>
-                            <td><?php echo $row['issues']; ?></td>
-                            <td><a href="<?php echo $row['pdf']; ?>" target="_blank">View PDF</a></td>
-                            <td><?php echo $row['reference']; ?></td>
-                            <td><?php echo $row['citation']; ?></td>
-                            <td><?php echo $row['comments']; ?></td>
-                            <td><?php echo $row['status']; ?></td>
-                            <td><a href="edit_article.php?id=<?php echo $row['id']; ?>" class="edit">Edit</a></td>
-                            <td><input type="checkbox" name="selected_issues[]" value="<?php echo $row['id']; ?>"></td>
-                        </tr>
-                    <?php endwhile; ?>
-                </table><br>
-                <button type="submit" name="delete_selected" class="btndel">Delete Selected</button>
-            </form>
+                                <div class="mb-3">
+                                    <label for="abstract" class="form-label">Abstract</label>
+                                    <textarea name="abstract" id="abstract" class="form-control" rows="4" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="issues" class="form-label">Select Issue</label>
+                                    <select name="category" id="category" class="form-select" required>
+                                        <?php while ($issue = mysqli_fetch_assoc($issuesResult)): ?>
+                                            <option value="<?php echo $issue['title']; ?>">
+                                                <?php echo $issue['title']; ?> (Vol. <?php echo $issue['vol_no']; ?>, <?php echo $issue['publication_date']; ?>)
+                                            </option>
+                                        <?php endwhile; ?>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="pdf" class="form-label">Upload Paper (PDF Format)</label>
+                                    <input type="file" name="pdf" id="pdf" class="form-control" accept=".pdf" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="reference" class="form-label">References</label>
+                                    <textarea name="reference" id="reference" class="form-control" rows="2" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="citation" class="form-label">Citation</label>
+                                    <textarea name="citation" id="citation" class="form-control" rows="2" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="comments" class="form-label">Comments</label>
+                                    <textarea name="comments" id="comments" class="form-control" rows="2" required></textarea>
+                                </div>
+
+                                <button type="submit" name="submit" class="btn btn-success">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Articles List -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Articles List</h4>
+                            <form action="" method="get" class="d-flex mt-2">
+                                <input type="text" name="search" class="form-control me-2" placeholder="Search by title" required>
+                                <button type="submit" class="btn btn-outline-success">Search</button>
+                            </form>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <form action="" method="post">
+                                <table class="table table-bordered table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>Author</th>
+                                            <th>Email</th>
+                                            <th>Abstract</th>
+                                            <th>DOI</th>
+                                            <th>Issues</th>
+                                            <th>PDF</th>
+                                            <th>References</th>
+                                            <th>Citations</th>
+                                            <th>Comments</th>
+                                            <th>Status</th>
+                                            <th>Edit</th>
+                                            <th>Select</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = mysqli_fetch_assoc($searchResult)): ?>
+                                            <tr>
+                                                <td><?php echo $row['id']; ?></td>
+                                                <td><?php echo $row['title']; ?></td>
+                                                <td><?php echo $row['author']; ?></td>
+                                                <td><?php echo $row['email']; ?></td>
+                                                <td><?php echo $row['abstract']; ?></td>
+                                                <td><?php echo $row['doi']; ?></td>
+                                                <td><?php echo $row['issues']; ?></td>
+                                                <td><a href="<?php echo $row['pdf']; ?>" target="_blank">View PDF</a></td>
+                                                <td><?php echo $row['reference']; ?></td>
+                                                <td><?php echo $row['citation']; ?></td>
+                                                <td><?php echo $row['comments']; ?></td>
+                                                <td><?php echo $row['status']; ?></td>
+                                                <td><a href="edit-articles.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-success">Edit</a></td>
+                                                <td><input type="checkbox" name="selected_issues[]" value="<?php echo $row['id']; ?>"></td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
+                                <button type="submit" name="delete_selected" class="btn btn-success">Delete Selected</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
-</html>
 
-<?php
-$conn->close();
-?>
+</html>

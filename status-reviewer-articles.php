@@ -25,88 +25,60 @@ $articlesResult = mysqli_query($conn, $articlesQuery);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviewer Article Status</title>
-    <style>
-        .btn-accept {
-            background-color: green;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .btn-reject {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .btn-accept:hover {
-            background-color: darkgreen;
-        }
-        .btn-reject:hover {
-            background-color: darkred;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <h1>ARTICLES FOR REVIEW</h1>
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Email</th>
-                    <th>Abstract</th>
-                    <th>DOI</th>
-                    <th>Reference</th>
-                    <th>Citation</th>
-                    <th>Comments</th>
-                    <th>Issue</th>
-                    <th>PDF</th>
-                    <th>Reviewer Decision</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = mysqli_fetch_assoc($articlesResult)): ?>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">ARTICLES FOR REVIEW</h1>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['title']); ?></td>
-                        <td><?php echo htmlspecialchars($row['author']); ?></td>
-                        <td><?php echo htmlspecialchars($row['email']); ?></td>
-                        <td><?php echo htmlspecialchars($row['abstract']); ?></td>
-                        <td><?php echo htmlspecialchars($row['doi']); ?></td>
-                        <td><?php echo htmlspecialchars($row['reference']); ?></td>
-                        <td><?php echo htmlspecialchars($row['citation']); ?></td>
-                        <td><?php echo htmlspecialchars($row['comments']); ?></td>
-                        <td><?php echo htmlspecialchars($row['issues']); ?></td>
-                        <td><a href="<?php echo $row['pdf']; ?>" target="_blank">PDF</a></td>
-                        <td>
-                            <a href="?action=accept&article_id=<?php echo $row['id']; ?>" class="btn-accept">Accept</a>
-                            <a href="?action=reject&article_id=<?php echo $row['id']; ?>" class="btn-reject">Reject</a>
-                        </td>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Email</th>
+                        <th>Abstract</th>
+                        <th>DOI</th>
+                        <th>Reference</th>
+                        <th>Citation</th>
+                        <th>Comments</th>
+                        <th>Issue</th>
+                        <th>PDF</th>
+                        <th>Reviewer Decision</th>
                     </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php while ($row = mysqli_fetch_assoc($articlesResult)): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['title']); ?></td>
+                            <td><?php echo htmlspecialchars($row['author']); ?></td>
+                            <td><?php echo htmlspecialchars($row['email']); ?></td>
+                            <td><?php echo htmlspecialchars($row['abstract']); ?></td>
+                            <td><?php echo htmlspecialchars($row['doi']); ?></td>
+                            <td><?php echo htmlspecialchars($row['reference']); ?></td>
+                            <td><?php echo htmlspecialchars($row['citation']); ?></td>
+                            <td><?php echo htmlspecialchars($row['comments']); ?></td>
+                            <td><?php echo htmlspecialchars($row['issues']); ?></td>
+                            <td><a href="<?php echo $row['pdf']; ?>" target="_blank" class="btn btn-outline-primary btn-sm">PDF</a></td>
+                            <td>
+                                <a href="?action=accept&article_id=<?php echo $row['id']; ?>" class="btn btn-success btn-sm">Accept</a>
+                                <a href="?action=reject&article_id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Reject</a>
+                            </td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
+
 </html>
 
 <?php

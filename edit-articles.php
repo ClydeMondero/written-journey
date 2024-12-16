@@ -1,7 +1,6 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include('authors-nav.php');
 require 'connection.php';
 
 if (isset($_GET['id'])) {
@@ -75,66 +74,94 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
     <meta charset="utf-8">
     <title>Edit Article</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
-    <h1 class="text1">EDIT ARTICLE</h1>
-    <div class="all">
-        <div class="edit">
-            <h2 class="text2">EDIT ARTICLE</h2><br>
-            <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
-                <label for="title">Title:</label>
-                <input type="text" name="title" id="title" value="<?php echo $article['title']; ?>" required><br><br>
-                
-                <label for="author">Author:</label>
-                <input type="text" name="author" id="author" value="<?php echo $article['author']; ?>" required><br><br>
-                
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="email" value="<?php echo $article['email']; ?>" required><br><br>
-                
-                <label for="abstract">Abstract:</label>
-                <textarea name="abstract" id="abstract" required><?php echo $article['abstract']; ?></textarea><br><br>
 
-                <label for="category">Select Issue:</label><br>
-                <select name="category" id="category" required>
-                    <?php
-                    // Fetch all issues for the dropdown
-                    $issuesQuery = "SELECT * FROM issues";
-                    $issuesResult = mysqli_query($conn, $issuesQuery);
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="text-center mb-4">EDIT ARTICLE</h2>
+                <form action="" method="post" autocomplete="off" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title:</label>
+                        <input type="text" name="title" id="title" class="form-control" value="<?php echo $article['title']; ?>" required>
+                    </div>
 
-                    while ($issue = mysqli_fetch_assoc($issuesResult)) {
-                        $selected = ($issue['title'] == $article['issues']) ? 'selected' : '';
-                        echo "<option value='" . $issue['title'] . "' $selected>" . $issue['title'] . " (Vol. " . $issue['vol_no'] . ", " . $issue['publication_date'] . ")</option>";
-                    }
-                    ?>
-                </select><br><br>
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author:</label>
+                        <input type="text" name="author" id="author" class="form-control" value="<?php echo $article['author']; ?>" required>
+                    </div>
 
-                <label for="reference">References:</label>
-                <textarea name="reference" id="reference" required><?php echo $article['reference']; ?></textarea><br><br>
-                
-                <label for="citation">Citation:</label>
-                <textarea name="citation" id="citation" required><?php echo $article['citation']; ?></textarea><br><br>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" id="email" class="form-control" value="<?php echo $article['email']; ?>" required>
+                    </div>
 
-                <label for="comments">Comments:</label>
-                <textarea name="comments" id="comments" required><?php echo $article['comments']; ?></textarea><br><br>
+                    <div class="mb-3">
+                        <label for="abstract" class="form-label">Abstract:</label>
+                        <textarea name="abstract" id="abstract" class="form-control" rows="3" required><?php echo $article['abstract']; ?></textarea>
+                    </div>
 
-                <!-- Show the current PDF but allow a new one to be uploaded -->
-                <label for="pdf">Current PDF:</label>
-                <a href="<?php echo $article['pdf']; ?>" target="_blank">View PDF</a><br><br>
-                <label for="pdf">Upload New PDF (Optional):</label>
-                <input type="file" name="pdf" id="pdf" accept=".pdf"><br><br>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Select Issue:</label>
+                        <select name="category" id="category" class="form-select" required>
+                            <?php
+                            $issuesQuery = "SELECT * FROM issues";
+                            $issuesResult = mysqli_query($conn, $issuesQuery);
 
-                <!-- DOI should not be editable -->
-                <label for="doi">DOI:</label>
-                <input type="text" name="doi" id="doi" value="<?php echo $article['doi']; ?>" readonly><br><br>
+                            while ($issue = mysqli_fetch_assoc($issuesResult)) {
+                                $selected = ($issue['title'] == $article['issues']) ? 'selected' : '';
+                                echo "<option value='" . $issue['title'] . "' $selected>" . $issue['title'] . " (Vol. " . $issue['vol_no'] . ", " . $issue['publication_date'] . ")</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <button type="submit" name="submit" class="btnSubmit">Update Article</button>
-            </form>
+                    <div class="mb-3">
+                        <label for="reference" class="form-label">References:</label>
+                        <textarea name="reference" id="reference" class="form-control" rows="2" required><?php echo $article['reference']; ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="citation" class="form-label">Citation:</label>
+                        <textarea name="citation" id="citation" class="form-control" rows="2" required><?php echo $article['citation']; ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="comments" class="form-label">Comments:</label>
+                        <textarea name="comments" id="comments" class="form-control" rows="2" required><?php echo $article['comments']; ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pdf" class="form-label">Current PDF:</label>
+                        <a href="<?php echo $article['pdf']; ?>" target="_blank" class="form-text">View PDF</a>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pdf" class="form-label">Upload New PDF (Optional):</label>
+                        <input type="file" name="pdf" id="pdf" class="form-control" accept=".pdf">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="doi" class="form-label">DOI:</label>
+                        <input type="text" name="doi" id="doi" class="form-control" value="<?php echo $article['doi']; ?>" readonly>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+                        <button type="submit" name="submit" class="btn btn-success">Update Article</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </body>
+
 </html>
 
 <?php mysqli_close($conn); ?>
