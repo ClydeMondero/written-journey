@@ -6,7 +6,7 @@ include('customer-nav.php');
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_name'])) {
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -16,7 +16,7 @@ $userName = $_SESSION['user_name'];
 if (isset($_GET['logout']) && $_GET['logout'] == 1) {
     session_unset();
     session_destroy();
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -35,6 +35,10 @@ $resultUser = $stmt->get_result();
 if ($resultUser->num_rows > 0) {
     $user = $resultUser->fetch_assoc();
     $profilePic = $user['image_path'];
+
+    if (empty($profilePic)) {
+        $profilePic = 'default-profile.png';
+    }
 } else {
     $profilePic = 'default-profile.png';
 }
@@ -99,37 +103,47 @@ if (isset($_GET['download']) && is_numeric($_GET['download'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Articles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <div class="content">
-        <h1>Search Articles</h1>
-        <form method="GET" action="">
-            <input type="text" name="search" value="<?= htmlspecialchars($search); ?>" placeholder="Search by title or author">
-            <button type="submit">Search</button>
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Search Articles</h1>
+        <form method="GET" action="" class="d-flex justify-content-center mb-3">
+            <input type="text" name="search" value="<?= htmlspecialchars($search); ?>" placeholder="Search by title or author" class="form-control me-2">
+            <button type="submit" class="btn btn-success">Search</button>
         </form>
         <hr>
         <?php if ($resultArticles->num_rows > 0): ?>
-            <h2>Search Results</h2>
-            <?php while ($article = $resultArticles->fetch_assoc()): ?>
-                <div class="article-card">
-                    <h3><?= htmlspecialchars($article['title']); ?></h3>
-                    <p><strong>Author:</strong> <?= htmlspecialchars($article['author']); ?></p>
-                    <p><strong>Abstract:</strong> <?= htmlspecialchars($article['abstract']); ?></p>
-                    <p><strong>DOI:</strong> <?= htmlspecialchars($article['doi']); ?></p>
-                    <p><strong>Reference:</strong> <?= htmlspecialchars($article['reference']); ?></p>
-                    <p><strong>Citation:</strong> <?= htmlspecialchars($article['citation']); ?></p>
-                    <p><strong>Download Count:</strong> <?= htmlspecialchars($article['download_count']); ?></p>
-                    <a href="?download=<?= htmlspecialchars($article['id']); ?>">Download PDF</a>
-                </div>
-                <hr>
-            <?php endwhile; ?>
+            <h2 class="text-center mt-4">Search Results</h2>
+            <div class="row">
+                <?php while ($article = $resultArticles->fetch_assoc()): ?>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title"><?= htmlspecialchars($article['title']); ?></h3>
+                                <p class="card-text"><strong>Author:</strong> <?= htmlspecialchars($article['author']); ?></p>
+                                <p class="card-text"><strong>Abstract:</strong> <?= htmlspecialchars($article['abstract']); ?></p>
+                                <p class="card-text"><strong>DOI:</strong> <?= htmlspecialchars($article['doi']); ?></p>
+                                <p class="card-text"><strong>Reference:</strong> <?= htmlspecialchars($article['reference']); ?></p>
+                                <p class="card-text"><strong>Citation:</strong> <?= htmlspecialchars($article['citation']); ?></p>
+                                <p class="card-text"><strong>Download Count:</strong> <?= htmlspecialchars($article['download_count']); ?></p>
+                                <a href="?download=<?= htmlspecialchars($article['id']); ?>" class="btn btn-success">Download PDF</a>
+                            </div>
+                        </div>
+                    </div>
+                <?php endwhile; ?>
+            </div>
         <?php else: ?>
-            <p>No articles found for the search term.</p>
+            <p class="text-center text-muted">No articles found for the search term.</p>
         <?php endif; ?>
     </div>
 </body>
+
 </html>

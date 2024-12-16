@@ -6,7 +6,7 @@ include('customer-nav.php');
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_name'])) {
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -16,7 +16,7 @@ $userName = $_SESSION['user_name'];
 if (isset($_GET['logout']) && $_GET['logout'] == 1) {
     session_unset();
     session_destroy();
-    header("Location: http://localhost/journal/login.php");
+    header("Location: http://localhost/written-journey/login.php");
     exit;
 }
 
@@ -50,75 +50,88 @@ $resultMostDownloaded = $conn->query($sqlMostDownloaded);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <title>Reader Dashboard</title>
 </head>
+
 <body>
-    <div class="content">
+    <div class="container mt-4">
         <!-- Latest Issues Section -->
-        <div class="latest-issues">
-            <h2>Latest Issues</h2>
+        <div class="latest-issues mb-4">
+            <h2 class="mb-3">Latest Issues</h2>
             <?php if ($resultLatestIssues->num_rows > 0): ?>
-                <?php while ($issue = $resultLatestIssues->fetch_assoc()): ?>
-                    <div class="issue">
-                        <img src="img/<?= htmlspecialchars($issue['image'] ?? 'default-image.png'); ?>" alt="Issue Image" style="width: 50px; height: 50px;">
-                        <strong><?= htmlspecialchars($issue['title']); ?></strong> (Vol. <?= htmlspecialchars($issue['vol_no']); ?>, <?= htmlspecialchars($issue['publication_date']); ?>)
-                        <a href="customer-archives-articles.php?issues=<?= htmlspecialchars($issue['id']); ?>">View Articles</a>
-                    </div>
-                <?php endwhile; ?>
+                <div class="row">
+                    <?php while ($issue = $resultLatestIssues->fetch_assoc()): ?>
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <img class="card-img-top" src="img/<?= htmlspecialchars($issue['image'] ?? 'default-image.png'); ?>" alt="Issue Image" style="height: 150px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($issue['title']); ?></h5>
+                                    <p class="card-text">Vol. <?= htmlspecialchars($issue['vol_no']); ?>, <?= htmlspecialchars($issue['publication_date']); ?></p>
+                                    <a href="customer-archives-articles.php?issues=<?= htmlspecialchars($issue['id']); ?>" class="btn btn-success">View Articles</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
             <?php else: ?>
-                <p>No recent issues available.</p>
+                <p class="text-muted">No recent issues available.</p>
             <?php endif; ?>
         </div>
 
         <hr>
 
         <!-- Most Downloaded Articles Section -->
-        <div class="most-downloaded">
-            <h2>Most Downloaded Articles</h2>
+        <div class="most-downloaded mb-4">
+            <h2 class="mb-3">Most Downloaded Articles</h2>
             <?php if ($resultMostDownloaded->num_rows > 0): ?>
-                <?php while ($article = $resultMostDownloaded->fetch_assoc()): ?>
-                    <div class="article">
-                        <strong><?= htmlspecialchars($article['title']); ?></strong> by <?= htmlspecialchars($article['author']); ?>
-                        <p><strong>Abstract:</strong> <?= htmlspecialchars($article['abstract']); ?></p>
-                        <p><strong>DOI:</strong> <?= htmlspecialchars($article['doi']); ?></p>
-                        <p><strong>Reference:</strong> <?= htmlspecialchars($article['reference']); ?></p>
-                        <p><strong>Citation:</strong> <?= htmlspecialchars($article['citation']); ?></p>
-                        Downloads: <?= htmlspecialchars($article['download_count']); ?>
-                        <a href="customer-articles.php?download=<?= htmlspecialchars($article['id']); ?>">Download PDF</a>
-                    </div>
-                <?php endwhile; ?>
+                <div class="list-group">
+                    <?php while ($article = $resultMostDownloaded->fetch_assoc()): ?>
+                        <div class="list-group-item">
+                            <h5 class="mb-1"><?= htmlspecialchars($article['title']); ?></h5>
+                            <p class="mb-1">by <?= htmlspecialchars($article['author']); ?></p>
+                            <p><strong>Abstract:</strong> <?= htmlspecialchars($article['abstract']); ?></p>
+                            <p><strong>DOI:</strong> <?= htmlspecialchars($article['doi']); ?></p>
+                            <p><strong>Reference:</strong> <?= htmlspecialchars($article['reference']); ?></p>
+                            <p><strong>Citation:</strong> <?= htmlspecialchars($article['citation']); ?></p>
+                            <small class="text-muted">Downloads: <?= htmlspecialchars($article['download_count']); ?></small>
+                            <a href="customer-articles.php?download=<?= htmlspecialchars($article['id']); ?>" class="btn btn-success btn-sm">Download PDF</a>
+                        </div>
+                    <?php endwhile; ?>
+                </div>
             <?php else: ?>
-                <p>No articles with sufficient downloads.</p>
+                <p class="text-muted">No articles with sufficient downloads.</p>
             <?php endif; ?>
         </div>
 
         <hr>
 
         <!-- Journal Introduction -->
-        <div class="journal-introduction">
-            <h1 class="journal-title">ANDROMEDA ARCHIVE</h1>
-            <p class="journal-description"> 
-                <b>AndromedaArchive</b> is a peer-reviewed journal created by the students of Bulacan State University that publishes articles with its emergent issues. 
-                The journal is an annual publication that covers an extensive array of different emerging issues. 
-                It publishes diverse content that will be of interest to a wide range of readership.
-                Sample of this is research articles, article and book reviews, policy beliefs, creative works, and translations.
+        <div class="journal-intro">
+            <h1 class="display-4">WRITTEN JOURNEY</h1>
+            <p class="lead">
+                <strong>Written Journey</strong> is a scholarly journal by Bulacan State University students, focusing on contemporary issues.
+                It is published annually and covers a broad spectrum of emerging topics.
+                The journal features content appealing to diverse audiences, including research papers, reviews, policy discussions, creative pieces, and translations.
             </p>
-            <p class="journal-description">
-                <b>AndromedaArchive</b> provides a unique platform for knowledge sharing regarding, among other topics, pedagogy, curriculum, technology integration, teaching and learning, 
-                assessment and evaluation, education leadership, teacher education across the lifespan (early childhood care and development, basic education, tertiary, technical and vocational education, family and community, 
-                non-formal, informal and lifelong learning).
+            <p class="lead">
+                This publication serves as a unique forum for sharing insights on subjects such as pedagogy, curriculum development, technology integration, and educational leadership.
+                It addresses teacher education across different stages, including early childhood, basic, tertiary, technical, and vocational education, as well as community and lifelong learning.
             </p>
-            <p class="journal-description">
-                <b>AndromedaArchive</b> encourages the submission of original research articles, book reviews, and other forms of scholarly work.
-                Submissions are reviewed by a panel of experts in the field and are published in AndromedaArchive if they meet the quality standards.
+            <p class="lead">
+                <strong>Written Journey</strong> invites submissions of original research, book reviews, and scholarly articles.
+                Contributions undergo review by field experts and are published based on quality standards.
             </p>
-            <p class="journal-description">
-                <b>AndromedaArchive</b> aims to create a platform that encourages innovation and fosters collaboration among researchers, educators, and students, and to promote a deeper understanding of the world around us.
+            <p class="lead">
+                The journal aims to foster innovation and collaboration among researchers, educators, and students, promoting a deeper understanding of the world.
             </p>
         </div>
     </div>
 </body>
+
 </html>
